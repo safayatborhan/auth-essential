@@ -52,6 +52,7 @@ namespace auth_essential.Controllers
                 safayatLicenceIdentity
             });
 
+            // Everything we have done here is to store information into cookie and authenticate using these.
             // So, we build user identity here and after that we are sending these identity to authorize the user. 
             // This will basically create a cookie object in browser.
             // In ConfigureServices, 
