@@ -16,6 +16,15 @@ namespace auth_essential
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication("CookieAuth")
+                .AddCookie("CookieAuth", config =>
+                {
+                    //You won't getting in if you don't have Safayat's cookie.
+                    config.Cookie.Name = "Safayat.Cookie";
+                    config.LoginPath = "/Home/Authenticate";
+                });
+
+            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -28,12 +37,15 @@ namespace auth_essential
 
             app.UseRouting();
 
+            // who are you? 
+            app.UseAuthentication();
+
+            // are you allowed? 
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapDefaultControllerRoute();
             });
         }
     }
