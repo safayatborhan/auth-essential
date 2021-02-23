@@ -6,7 +6,10 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using auth_essential.AuthorizationRequirements;
+using Microsoft.AspNetCore.Authorization;
 
 namespace auth_essential
 {
@@ -23,6 +26,30 @@ namespace auth_essential
                     config.Cookie.Name = "Safayat.Cookie";
                     config.LoginPath = "/Home/Authenticate";
                 });
+
+            services.AddAuthorization(config =>
+            {
+                //var defaultAuthBuilder = new AuthorizationPolicyBuilder();
+                //var defaultAuthPolicy = defaultAuthBuilder
+                //    .RequireAuthenticatedUser()
+                //    .RequireClaim(ClaimTypes.DateOfBirth)
+                //    .Build();
+
+                //config.DefaultPolicy = defaultAuthPolicy;
+
+                //config.AddPolicy("Claim.DoB", policyBuilder =>
+                //{
+                //    policyBuilder.RequireClaim(ClaimTypes.DateOfBirth);
+                //});
+
+                config.AddPolicy("Claim.DoB", policyBuilder =>
+                {
+                    policyBuilder.AddRequirements(new CustomRequireClaim(ClaimTypes.DateOfBirth));
+                });
+
+            });
+
+            services.AddScoped<IAuthorizationHandler, CustomRequireClaimHandler>();
 
             services.AddControllersWithViews();
         }

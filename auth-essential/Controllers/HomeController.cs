@@ -24,6 +24,20 @@ namespace auth_essential.Controllers
             return View();
         }
 
+        [Authorize(Policy = "Claim.DoB")]
+        public IActionResult SecretPolicy()
+        {
+            return View("Secret");
+        }
+
+        // Role is kind of policy. It supports legacy code. 
+        // If you add another claim for role = Admin in authentication, it will work. 
+        [Authorize(Roles = "Admin")]
+        public IActionResult SecretRole()
+        {
+            return View("Secret");
+        }
+
         public IActionResult Authenticate()
         {
             /*
@@ -34,6 +48,8 @@ namespace auth_essential.Controllers
             {
                 new Claim(ClaimTypes.Name, "Safayat"),
                 new Claim(ClaimTypes.Email, "safayat.borhan@selise.ch"),
+                new Claim(ClaimTypes.DateOfBirth, "01/01/2000"),
+                new Claim(ClaimTypes.Role, "AdminTwo"), // This won't work but if you put Admin, it will work. You know why.
                 new Claim("Friend.Says", "Good boy.")
             };
 
